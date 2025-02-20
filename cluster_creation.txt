@@ -1,3 +1,13 @@
+JAR CREATION
+
+in the spark-app/ directory run the command
+`sbt assembly`
+the jar will be generated in the target/ directory
+
+LOAD JAR
+
+aws s3 cp spark-app/target/scala-2.13/<jar_name>.jar s3://project-bucket-ale-pipita/<job_name>.jar
+
 CLUSTER CREATION
 
 aws emr create-cluster \
