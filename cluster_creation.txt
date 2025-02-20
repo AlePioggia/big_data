@@ -1,0 +1,26 @@
+CLUSTER CREATION
+
+aws emr create-cluster \
+    --name "Big Data Cluster" \
+    --release-label "emr-7.3.0" \
+    --applications Name=Hadoop Name=Spark \
+    --instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m4.large InstanceGroupType=CORE,InstanceCount=2,InstanceType=m4.large \
+    --service-role EMR_DefaultRole \
+    --ec2-attributes InstanceProfile=EMR_EC2_DefaultRole,KeyName=pipitaKeys \
+    --region "us-east-1" \
+    --log-uri s3://project-bucket-ale-pipita/emr-logs/
+
+DEPLOY
+
+aws emr add-steps \
+  --cluster-id j-1DJI50W73TH79 \
+  --steps '[{
+    "Type": "Spark",
+    "Name": "ExampleJob",
+    "ActionOnFailure": "CONTINUE",
+    "Args": [
+      "--deploy-mode", "cluster",
+      "--class", "example.ExampleJob",
+      "s3://project-bucket-ale-pipita/main_job.jar"
+    ]
+  }]'
