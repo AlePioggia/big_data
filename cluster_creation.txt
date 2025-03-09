@@ -20,6 +20,33 @@ aws emr create-cluster \
     --region "us-east-1" \
     --log-uri s3://project-bucket-ale-pipita/emr-logs/
 
+OPTIMIZED CLUSTER
+
+aws emr create-cluster \
+    --name "Big Data Cluster" \
+    --release-label "emr-7.3.0" \
+    --applications Name=Hadoop Name=Spark \
+    --instance-groups InstanceGroupType=MASTER,InstanceCount=1,InstanceType=m4.large \
+                      InstanceGroupType=CORE,InstanceCount=2,InstanceType=m4.large \
+    --service-role EMR_DefaultRole \
+    --ec2-attributes InstanceProfile=EMR_EC2_DefaultRole,KeyName=pipitaKeys \
+    --region "us-east-1" \
+    --log-uri s3://project-bucket-ale-pipita/emr-logs/ \
+    --configurations '[ 
+        { 
+            "Classification": "spark", 
+            "Properties": { 
+                "spark.executor.instances": "3", 
+                "spark.executor.cores": "4", 
+                "spark.executor.memory": "6G", 
+                "spark.driver.memory": "4G", 
+                "spark.driver.cores": "2" 
+            } 
+        } 
+    ]'
+
+"4 cores per executor, 6gb of executor memory (75% of 8gb), 4gb of driver memory and 2 cores for driver"
+
 DEPLOY
 
 aws emr add-steps \
