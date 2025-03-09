@@ -57,7 +57,7 @@ aws emr add-steps \
     "ActionOnFailure": "CONTINUE",
     "Args": [
       "--deploy-mode", "cluster",
-      "--class", "example.ExampleJob",
+      "--class", "ExampleJob",
       "s3://project-bucket-ale-pipita/main_job.jar"
     ]
   }]'
